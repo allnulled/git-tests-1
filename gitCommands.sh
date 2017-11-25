@@ -155,32 +155,55 @@ function gitanoPush () {
     echo " (*) Pushing"
     echo
     echo " (*) Push Info:"
-    echo " (*) Current branch: $(gitCurrentBranch)"
-    echo " (*) Current user: $(gitCurrentUser)"
-    echo " (*) Current email: $(gitCurrentEmail)"
-    echo " (*) Current repository: $(gitCurrentRepository)"
+    echo " (*) Current branch: $(gitanoCurrentBranch)"
+    echo " (*) Current user: $(gitanoCurrentUser)"
+    echo " (*) Current email: $(gitanoCurrentEmail)"
+    echo " (*) Current repository: $(gitanoCurrentRepository)"
     echo " (*) Current commit message:"
     echo 
     echo " ---------------------------"
-    gitCurrentCommitMessage
+    gitanoCurrentCommitMessage
     echo " ---------------------------"
     echo 
     echo " (*) Current commit differences:"
     echo
-    gitDifferences
+    gitanoDifferences
     echo
-    read -p "Do you want to push it now? (y/N)" -n 1 -r
-	echo  
-	if [[ ! $REPLY =~ ^[YyEeSs]?$ ]]
+    read -p " - Do you want to commit the changes to your local branch $(gitanoCurrentBranch) now? (y/N)" -n 1 -r
+	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]
 	then
-	    echo " (*) Commiting changes to local"
-	    git commit 
-	else 
+		echo 
+		echo 
 		echo " (*) Abort commit."
+		return 0
+	else 
+		echo 
+		echo 
+	    echo " (*) Commiting changes to local [git commit]"
+	    git commit 
+	fi
+	echo
+	echo 
+	read -p " - Do you want to push the changes to remote repository now? (y/N)" -n 1 -r 
+	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]
+	then 
+		echo 
+		echo 
+		echo " (*) Abort push."
+		return 0
+	else
+	    echo "Okay, 'yes' but..."
+	fi
+	read -p "Are you sure? (y/N)" -n 1 -r 
+	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]
+	then
+	    echo " (*) Pushing changes to remote /origin/$(gitanoCurrentBranch) [git push origin current]"
+	    git push origin current
+	else 
+		echo " (*) Abort push."
+		return 0
 	fi
     echo
-    echo
-    echo "You are $IS_SURE. Ok."
 }
 alias gitanoPush="gitanoPush"
 #------------- Git-Current-Branch -------
