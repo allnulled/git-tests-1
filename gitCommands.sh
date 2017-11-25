@@ -40,13 +40,17 @@ alias gitanoLogin="gitanoLogin"
 function gitanoCreateRepository () {
 	echo " (*) Asking for repository's data...:"
 	local REPOSITORY_URL
-	read -p " - First remote repository will be 'origin'."
-	read -p " - And first local branch will be 'master'."
-	read -p " - So, type the @URL of the repository (usually ending with *.git): " REPOSITORY_URL
-	echo " (*) Creating remote repository 'origin' from local branch 'master' in remote git server $REPOSITORY_URL"
+	echo " (*) First remote repository will be 'origin'."
+	echo " (*) And first local branch will be 'master'."
+	read -p " - URL of the repository (*.git): " REPOSITORY_URL
+	echo " (*) Creating default README.md file [touch README.md]"
 	touch README.md
-	echo ""
+	echo "# Read this file" >> README.md
+	echo " (*) Adding README.md to commit [git add README.md]"
+	git add README.md
+	echo " (*) Creating remote repository 'origin' at URL $REPOSITORY_URL [git remote add origin $REPOSITORY_URL]"
 	git remote add origin $REPOSITORY_URL
+	echo " (*) Pushing the first branch 'master' to 'origin' [git push -u origin master]"
 	git push -u origin master
 }
 alias gitanoCreateRepository="gitanoCreateRepository"
@@ -169,7 +173,9 @@ function gitanoPush () {
     echo
     gitanoDifferences
     echo
-    read -p " - Do you want to commit the changes to your local branch $(gitanoCurrentBranch) now? (y/N)" -n 1 -r
+	echo
+	echo
+    read -p " - ¿COMMIT BRANCH $(gitanoCurrentBranch) NOW? (y/N)" -n 1 -r
 	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]
 	then
 		echo 
@@ -183,8 +189,16 @@ function gitanoPush () {
 	    git commit 
 	fi
 	echo
-	echo 
-	read -p " - Do you want to push the changes to remote repository now? (y/N)" -n 1 -r 
+	echo
+	echo
+	echo " (*) Final commit message: "
+	echo "$(gitanoCurrentCommitMessage)"
+	echo " (*) Current repository: $(gitanoCurrentRepository)"
+	echo " (*) Current branch: $(gitanoCurrentBranch)"
+	echo
+	echo
+	echo
+	read -p " - ¿PUSH CHANGES OF BRANCH '$(gitanoCurrentBranch)'? (y/N)" -n 1 -r 
 	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]
 	then 
 		echo 
@@ -192,16 +206,21 @@ function gitanoPush () {
 		echo " (*) Abort push."
 		return 0
 	else
+		echo
+		echo
 	    echo "Okay, 'yes' but..."
 	fi
-	read -p "Are you sure? (y/N)" -n 1 -r 
+	echo
+	echo
+	echo
+	read -p " - ¿Are you sure? (y/N)" -n 1 -r 
 	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]
 	then
-	    echo " (*) Pushing changes to remote /origin/$(gitanoCurrentBranch) [git push origin current]"
-	    git push origin current
-	else 
 		echo " (*) Abort push."
 		return 0
+	else 
+	    echo " (*) Pushing changes to remote /origin/$(gitanoCurrentBranch) [git push origin $(gitanoCurrentBranch)]"
+	    git push -u origin "$(gitanoCurrentBranch)"
 	fi
     echo
 }
@@ -223,7 +242,7 @@ function gitanoCurrentEmail () {
 alias gitanoCurrentEmail="gitanoCurrentEmail"
 #------------- Git-Current-Repository -------
 function gitanoCurrentRepository () {
-	git config user.name
+	basename `git rev-parse --show-toplevel`
 }
 alias gitanoCurrentRepository="gitanoCurrentRepository"
 #------------- Git-Current-Commit-Message -------
