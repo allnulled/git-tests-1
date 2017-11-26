@@ -361,7 +361,7 @@ function gitanocommitinformation () {
 	gitanouser
 	gitanoemail
 	gitanorepository
-	gitanocommitMessage
+	gitanocommitmessage
 	gitanodifferences
 }
 alias gitanocommitinformation="gitanocommitinformation"
@@ -380,12 +380,15 @@ function gitano () {
     if [[ -z "$1" ]]; then
     	echo " (*) Current commit status"
     	git status
+    	echo " (*) Showing branches sorted by last commit [...]"
+		# git for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate) %(refname)'
+		for branch in `git branch | sed s/^..//`; do
+		    echo -e `git log -1 --pretty=format:"%Cgreen%ci %Cblue%cr%Creset" "$branch"`\\t"$branch";
+		done | sort -r
     	return 0
     fi
 	echo " (*) Showing status of file $1 [git status $1]"
 	git status "$1"
-	echo " (*) Showing branches sorted by last commit [git for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate:short) %(refname:short)']"
-	git for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate:short) %(refname:short)'
 }
 alias gitano="gitano"
 
