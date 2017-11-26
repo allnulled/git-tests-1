@@ -97,6 +97,7 @@ function gitanoupdatebranch () {
 alias gitanoupdatebranch="gitanoupdatebranch"
 
 alias gitanodifferences="gitanodifferences"
+
 #------------- Git-Commit -------
 function gitanocommit () {
     echo " (*) Commiting"
@@ -113,6 +114,7 @@ function gitanocommit () {
     git commit
 }
 alias gitanocommit="gitanocommit"
+
 #------------- Git-Push -------
 function gitanopush () {
     echo " (*) Pushing"
@@ -161,6 +163,7 @@ function gitanopush () {
     echo
 }
 alias gitanopush="gitanopush"
+
 #------------- Git-Add-File -------
 function gitanoaddfiles () {
     if [ $# -eq 0 ]
@@ -177,6 +180,7 @@ function gitanoaddfiles () {
     done
 }
 alias gitanoaddfiles="gitanoaddfiles"
+
 #------------- Git-Delete-Branch --------
 function gitanodeletebranch () {
 	echo " (*) Delete branch"
@@ -193,31 +197,37 @@ function gitanodeletebranch () {
     git branch -d $BRANCH_DELETABLE
 }
 alias gitanodeletebranch="gitanodeletebranch";
+
 #------------- Git-Current-Branch -------
 function gitanobranch () {
 	git symbolic-ref --short HEAD
 }
 alias gitanobranch="gitanobranch"
+
 #------------- Git-Current-User -------
 function gitanouser () {
 	git config user.name
 }
 alias gitanouser="gitanouser"
+
 #------------- Git-Current-Email -------
 function gitanoemail () {
 	git config user.email
 }
 alias gitanoemail="gitanoemail"
+
 #------------- Git-Current-Repository -------
 function gitanorepository () {
 	basename `git rev-parse --show-toplevel`
 }
 alias gitanorepository="gitanorepository"
+
 #------------- Git-Current-Commit-Message -------
 function gitanocommitmessage () {
 	git log -1
 }
 alias gitanocommitmessage="gitanocommitmessage"
+
 #------------- Git-Create-Local-Branch --------
 function gitanocreatelocalbranch () {
 	echo " (*) Listing current branches in remote:"
@@ -242,10 +252,11 @@ function gitanochangebranch () {
     read -p " - Type the branch's name to switch to: " BRANCH
     echo " (*) Switching current branch $(gitanobranch) to $BRANCH [git checkout $BRANCH]"
     git checkout "$BRANCH"
+    echo " (*) Showing last commits in branch $BRANCH [git log --pretty=oneline --abbrev-commit]"
+    git log --pretty=oneline --abbrev-commit
 }
 alias gitanochangebranch="gitanochangebranch"
 
-# NOT WORKING YET...
 #------------- Git-Create-Branch -------
 function gitanocreatebranch () {
 	echo " (*) Listing current branches in local [git branch]"
@@ -279,20 +290,29 @@ function gitanocreatebranch () {
 }
 alias gitanocreatebranch="gitanocreatebranch"
 
+# NOT WORKING YET...
+
 
 
 #------------- Git-Exists-Branch -------
-function gitanoexistsbranch () {
+function gitanobranches () {
 	local BRANCH BRANCH_ID
-	echo " (*) Available branches: [git branch]"
-	git branch
-	read -p " - Type the name of the branch you want to know if exists: " BRANCH
+	echo " (*) Available branches with last commits: [git branch -vv]"
+	git branch -vv
+	read -p " - Type the branch you want to pick the UUID: " BRANCH
 	echo " (*) Checking the branch UUID [git rev-parse --verify $BRANCH]"
 	BRANCH_ID=$(git rev-parse --verify "$BRANCH")
 	if [[ "$BRANCH_ID" == "" ]]; then
 		echo "No, the branch $BRANCH does not exists."
 	else
-		echo "The branch is: $BRANCH_ID"
+		echo "The UUID of the branch is:"
+		echo
+		echo 
+		echo
+		echo "        $BRANCH_ID       "
+		echo 
+		echo
+		echo
 	fi
 }
 #------------- Git-Delete-Branch -------
@@ -362,8 +382,10 @@ function gitano () {
     	git status
     	return 0
     fi
-	echo " (*) Showing status of file $1 [git status]"
+	echo " (*) Showing status of file $1 [git status $1]"
 	git status "$1"
+	echo " (*) Showing branches sorted by last commit [git for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate:short) %(refname:short)']"
+	git for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate:short) %(refname:short)'
 }
 alias gitano="gitano"
 
