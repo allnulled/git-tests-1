@@ -21,20 +21,20 @@ All the commands are available, at least, without any parameter. They'll try, in
 
 Just, for example, to create a repository:
 
-    ~$ gitanoCreateRepository
+    ~$ gitanocreaterepository
 
 Or to create a branch in your local repository:
 
 	
-    ~$ gitanoCreateBranch
+    ~$ gitanocreatebranch
 
 Or, for example, to change between branches:
 
-    ~$ gitanoChangeBranch
+    ~$ gitanochangebranch
 
 Or to commit your changes:
 
-    ~$ gitanoCommit
+    ~$ gitanocommit
 
 Or to commit and push them:
 
