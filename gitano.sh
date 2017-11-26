@@ -225,8 +225,11 @@ function gitanocreatelocalbranch () {
     echo " (*) Asking for branch-creation details"
     read -p " - Type the name of the new branch you want to create: " BRANCH
     read -p " - Type the name of the brand you want to extend: " BRANCH_ORIGIN
+    if [[ -z $BRANCH_ORIGIN ]]; then
+    	BRANCH_ORIGIN="$(gitanobranch)"
+    fi
     echo " (*) Creating branch [git checkout -b $BRANCH $BRANCH_ORIGIN]"
-    git checkout -b $BRANCH $BRANCH_ORIGIN
+    git checkout -b "$BRANCH" "$BRANCH_ORIGIN"
 }
 alias gitanocreatebranch="gitanocreatebranch"
 
