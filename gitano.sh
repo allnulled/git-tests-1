@@ -105,7 +105,7 @@ function gitanochangebranch () {
     echo " (*) Available branches: [git branch]"
     git branch
     read -p " - Type the branch's name to switch to: " BRANCH
-    echo " (*) Switching current branch $(gitanobranch) to $BRANCH [git checkout -p $BRANCH]"
+    echo " (*) Switching current branch $(gitanobranch) to $BRANCH [git checkout $BRANCH]"
     git checkout "$BRANCH_ORIGIN"
 }
 alias gitanochangebranch="gitanochangebranch"
