@@ -3,21 +3,21 @@
 # ALREADY WORKING!!
 
 # ------------ Git-Settings-Info ----------
-function gitanoSettingsInfo () {
+function gitanosettingsinfo () {
 	echo " (*) Your current settings [git config --list]:"
     git config --list
 }
-alias gitanoSettingsInfo="gitanoSettingsInfo"
+alias gitanosettingsinfo="gitanosettingsinfo"
 
 # ------------ Git-List-Repositories-URL ---------
-function gitanoListRepositories () {
+function gitanolistrepositories () {
 	echo " (*) Your current repositories [git remote -v]"
 	git remote -v
 }
-alias gitanoListRepositories="gitanoListRepositories"
+alias gitanolistrepositories="gitanolistrepositories"
 
 # ------------ Git-Login ---------------
-function gitanoLogin () {
+function gitanologin () {
     echo " (*) Asking for credentials' data"
     local USERNAME EMAIL PASSWORD
     read -p  " - Type the user's @name: " USERNAME 
@@ -34,10 +34,10 @@ function gitanoLogin () {
     echo " (*) Your current settings [git config --list]:"
     git config --list
 }
-alias gitanoLogin="gitanoLogin"
+alias gitanologin="gitanologin"
 
 # ------------ Git-Create-Repository-URL ---------
-function gitanoCreateRepository () {
+function gitanocreaterepository () {
 	echo " (*) Asking for repository's data...:"
 	local REPOSITORY_URL
 	echo " (*) First remote repository will be 'origin'."
@@ -53,10 +53,10 @@ function gitanoCreateRepository () {
 	echo " (*) Pushing the first branch 'master' to 'origin' [git push -u origin master]"
 	git push -u origin master
 }
-alias gitanoCreateRepository="gitanoCreateRepository"
+alias gitanocreaterepository="gitanocreaterepository"
 
 # ------------ Git-Set-Repository-URL ---------
-function gitanoSetRepositoryURL () {
+function gitanosetrepositoryurl () {
 	echo " (*) Listing current repositories"
 	git remote -v
 	echo " (*) Asking for the repository you want to change its URL"
@@ -67,10 +67,10 @@ function gitanoSetRepositoryURL () {
 	echo " (*) Set repository's new URL [git remote set-url $REPOSITORY_NAME $REPOSITORY_URL]"
 	git remote set-url $REPOSITORY_NAME $REPOSITORY_URL
 }
-alias gitanoSetRepositoryURL="gitanoSetRepositoryURL"
+alias gitanosetrepositoryurl="gitanosetrepositoryurl"
 
 #------------- Git-Create-Branch -------
-function gitanoCreateBranch () {
+function gitanocreatebranch () {
     local BRANCH BRANCH_ORIGIN
     echo " (*) Asking for branch-creation details"
     read -p " - Type the name of the new branch you want to create: " BRANCH
@@ -78,14 +78,14 @@ function gitanoCreateBranch () {
     echo " (*) Creating branch [git checkout -b $BRANCH $BRANCH_ORIGIN]"
     git checkout -b $BRANCH $BRANCH_ORIGIN
 }
-alias gitanoCreateBranch="gitanoCreateBranch"
+alias gitanocreatebranch="gitanocreatebranch"
 
 
 
 # NOT WORKING YET...
 
 #------------- Git-Initialize ----------
-function gitanoInitialize () {
+function gitanoinitialize () {
     echo " (*) This process will go by:"
     echo " (1) GIT Project Initialization"
     echo " (2) GIT Login"
@@ -94,26 +94,28 @@ function gitanoInitialize () {
     gitLogin
     gitCreateRepository
 }
-alias gitanoInitialize="gitanoInitialize"
+alias gitanoinitialize="gitanoinitialize"
 
 #------------- Git-Change-Branch -------
-function gitanoChangeBranch () {
-	local BRANCH BRANCH_ORIGIN
-    echo " (*) Changing to branch"
+function gitanochangebranch () {
+	local BRANCH
+    echo " (*) Current branch: $(gitanocurrentbranch)"
+    echo " (*) Available branches: [git branch]"
+    git branch
     read -p " - Type the branch's name to switch to: " BRANCH
-    echo " (*) Switching to branch $BRANCH [git checkout -p $BRANCH_ORIGIN]"
+    echo " (*) Switching current branch $(gitanocurrentbranch) to $BRANCH [git checkout -p $BRANCH]"
     git checkout -p "$BRANCH_ORIGIN"
 }
-alias gitanoChangeBranch="gitanoChangeBranch"
+alias gitanochangebranch="gitanochangebranch"
 #------------- Git-Delete-Branch -------
-function gitanoDeleteBranch () {
+function gitanodeletebranch () {
     echo " (*) Deleting branch"
     echo " (*) Deleting branch $1"
     echo " (*) Deleting branch $1 in its version $2"
 }
-alias gitanoDeleteBranch="gitanoDeleteBranch"
+alias gitanodeletebranch="gitanodeletebranch"
 #------------- Git-History-Branch -------
-function gitanoHistory () {
+function gitanohistory () {
 	if [ -z "$1" ]
 	then
 		echo " (*) Checking history of current branch [git log]"
@@ -123,21 +125,21 @@ function gitanoHistory () {
 		git log "$1"
 	fi
 }
-alias gitanoHistory="gitanoHistory"
+alias gitanohistory="gitanohistory"
 #------------- Git-Differences -------
-function gitanoDifferences () {
+function gitanodifferences () {
     echo " (*) Showing differences between current commit and previous commit:"
 
 }
-alias gitanoDifferences="gitanoDifferences"
+alias gitanodifferences="gitanodifferences"
 #------------- Git-Solve-Differences -------
-function gitanoSolveDifferences () {
+function gitanosolvedifferences () {
     echo " (*) Solving differences"
     git difftool --prompt
 }
-alias gitanoDifferences="gitanoDifferences"
+alias gitanodifferences="gitanodifferences"
 #------------- Git-Commit -------
-function gitanoCommit () {
+function gitanocommit () {
     echo " (*) Commiting"
     echo " (*) Commiting with message $1"
     echo " (*) Commiting branch: x"
@@ -146,36 +148,36 @@ function gitanoCommit () {
     read -p "Is it okay? (y/N)" -n 1 -r
 	echo  
 	if [[ ! $REPLY =~ ^[YyEeSs]?$ ]]
-	then
-	    echo " (*) Commiting changes to local"
-	    git commit 
-	else 
+	then 
 		echo " (*) Abort commit."
+	else 
+	    echo " (*) Commiting changes to local"
+	    git commit
 	fi
 }
-alias gitanoCommit="gitanoCommit"
+alias gitanocommit="gitanocommit"
 #------------- Git-Push -------
-function gitanoPush () {
+function gitanopush () {
     echo " (*) Pushing"
     echo
     echo " (*) Push Info:"
-    echo " (*) Current branch: $(gitanoCurrentBranch)"
-    echo " (*) Current user: $(gitanoCurrentUser)"
-    echo " (*) Current email: $(gitanoCurrentEmail)"
-    echo " (*) Current repository: $(gitanoCurrentRepository)"
+    echo " (*) Current branch: $(gitanocurrentbranch)"
+    echo " (*) Current user: $(gitanocurrentuser)"
+    echo " (*) Current email: $(gitanocurrentemail)"
+    echo " (*) Current repository: $(gitanocurrentrepository)"
     echo " (*) Current commit message:"
     echo 
     echo " ---------------------------"
-    gitanoCurrentCommitMessage
+    gitanocurrentcommitmessage
     echo " ---------------------------"
     echo 
     echo " (*) Current commit differences:"
     echo
-    gitanoDifferences
+    gitanodifferences
     echo
 	echo
 	echo
-    read -p " - ¿COMMIT BRANCH $(gitanoCurrentBranch) NOW? (y/N)" -n 1 -r
+    read -p " - ¿COMMIT BRANCH $(gitanocurrentbranch) NOW? (y/N)" -n 1 -r
 	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]
 	then
 		echo 
@@ -192,13 +194,13 @@ function gitanoPush () {
 	echo
 	echo
 	echo " (*) Final commit message: "
-	echo "$(gitanoCurrentCommitMessage)"
-	echo " (*) Current repository: $(gitanoCurrentRepository)"
-	echo " (*) Current branch: $(gitanoCurrentBranch)"
+	echo "$(gitanocurrentcommitmessage)"
+	echo " (*) Current repository: $(gitanocurrentrepository)"
+	echo " (*) Current branch: $(gitanocurrentbranch)"
 	echo
 	echo
 	echo
-	read -p " - ¿PUSH CHANGES OF BRANCH '$(gitanoCurrentBranch)'? (y/N)" -n 1 -r 
+	read -p " - ¿PUSH CHANGES OF BRANCH '$(gitanocurrentbranch)'? (y/N)" -n 1 -r 
 	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]
 	then 
 		echo 
@@ -219,50 +221,50 @@ function gitanoPush () {
 		echo " (*) Abort push."
 		return 0
 	else 
-	    echo " (*) Pushing changes to remote /origin/$(gitanoCurrentBranch) [git push origin $(gitanoCurrentBranch)]"
-	    git push -u origin "$(gitanoCurrentBranch)"
+	    echo " (*) Pushing changes to remote /origin/$(gitanocurrentbranch) [git push origin $(gitanocurrentbranch)]"
+	    git push -u origin "$(gitanocurrentbranch)"
 	fi
     echo
 }
-alias gitanoPush="gitanoPush"
+alias gitanopush="gitanopush"
 #------------- Git-Current-Branch -------
-function gitanoCurrentBranch () {
+function gitanocurrentbranch () {
 	git symbolic-ref --short HEAD
 }
-alias gitanoCurrentBranch="gitanoCurrentBranch"
+alias gitanocurrentbranch="gitanocurrentbranch"
 #------------- Git-Current-User -------
-function gitanoCurrentUser () {
+function gitanocurrentuser () {
 	git config user.name
 }
-alias gitanoCurrentUser="gitanoCurrentUser"
+alias gitanocurrentuser="gitanocurrentuser"
 #------------- Git-Current-Email -------
-function gitanoCurrentEmail () {
+function gitanocurrentemail () {
 	git config user.email
 }
-alias gitanoCurrentEmail="gitanoCurrentEmail"
+alias gitanocurrentemail="gitanocurrentemail"
 #------------- Git-Current-Repository -------
-function gitanoCurrentRepository () {
+function gitanocurrentrepository () {
 	basename `git rev-parse --show-toplevel`
 }
-alias gitanoCurrentRepository="gitanoCurrentRepository"
+alias gitanocurrentrepository="gitanocurrentrepository"
 #------------- Git-Current-Commit-Message -------
-function gitanoCurrentCommitMessage () {
+function gitanocurrentcommitmessage () {
 	git log -1
 }
-alias gitanoCurrentCommitMessage="gitanoCurrentCommitMessage"
+alias gitanocurrentcommitmessage="gitanocurrentcommitmessage"
 #------------- Git-Current-Differences -------
-function gitanoCurrentDifferences () {
+function gitanocurrentdifferences () {
 	git diff --name-only --diff-filter=U
 }
-alias gitanoCurrentDifferences="gitanoCurrentDifferences"
+alias gitanocurrentdifferences="gitanocurrentdifferences"
 #------------- Git-Solve-Differences -------------
-function gitanoSolveDifferences () {
+function gitanosolvedifferences () {
 	echo " (*) Solving pending differences between last pushed file and current commited file [git difftool --prompt"
 	git difftool --prompt
 }
-alias gitanoSolveDifferences="gitanoSolveDifferences"
+alias gitanosolvedifferences="gitanosolvedifferences"
 #------------- Git-Current-Commit-Information -------
-function gitanoCurrentCommitInformation () {
+function gitanocurrentcommitinformation () {
 	gitCurrentBranch
 	gitCurrentUser
 	gitCurrentEmail
@@ -270,9 +272,9 @@ function gitanoCurrentCommitInformation () {
 	gitCurrentCommitMessage
 	gitCurrentDifferences
 }
-alias gitanoCurrentCommitInformation="gitanoCurrentCommitInformation"
+alias gitanocurrentcommitinformation="gitanocurrentcommitinformation"
 #------------- Git-Mix-Branch- -------
-function gitanoMixBranch () {
+function gitanomixbranch () {
     echo " (*) Mixing current branch"   
     echo " (*) Mixing current branch with branch $1"
     echo " (1) Copy current branch in a temporary folder" 
@@ -280,15 +282,15 @@ function gitanoMixBranch () {
     echo " (3) Create same-named branch, but from the branch we want to mix"
     echo " (4) Add branch files to current same-named branch" 
 }
-alias gitanoMixBranch="gitanoMixBranch"
+alias gitanomixbranch="gitanomixbranch"
 #------------- Git-Status -------
-function gitanoStatus () {
+function gitanostatus () {
     echo " (*) Showing commit status"
     echo " (*) Showing commit status of file $1"
 }
-alias gitanoStatus="gitanoStatus"
+alias gitanostatus="gitanostatus"
 #------------- Git-Add-File -------
-function gitanoAddFiles () {
+function gitanoaddfiles () {
     if [ $# -eq 0 ]
 	then
 		echo " (*) Listing differences: $@"
@@ -302,33 +304,33 @@ function gitanoAddFiles () {
 	git add $file
     done
 }
-alias gitanoAddFiles="gitanoAddFiles"
+alias gitanoaddfiles="gitanoaddfiles"
 #------------- Git-Remove-File -------
-function gitanoRemoveFile () {
+function gitanoremovefile () {
     echo " (*) Removing file"
     echo " (*) Removing file $1"
 }
-alias gitanoRemoveFile="gitanoRemoveFile"
+alias gitanoremovefile="gitanoremovefile"
 #------------- Git-Revert-File -------
-function gitanoRevertFile () {
+function gitanorevertfile () {
     echo " (*) Reverting file $1 to version $2"
 }
-alias gitanoRevertFile="gitanoRevertFile"
+alias gitanorevertfile="gitanorevertfile"
 #------------- Git-Revert-Commit -------
-function gitanoRevertCommit () {
+function gitanorevertcommit () {
     echo " (*) Reverting commit $1 "
 }
-alias gitanoRevertCommit="gitanoRevertCommit"
+alias gitanorevertcommit="gitanorevertcommit"
 #------------- Git-Revert-Branch -------
-function gitanoRevertBranch () {
+function gitanorevertbranch () {
     echo " (*) Reverting branch"
     read -p " - Current branch"
 }
-alias gitanoRevertBranch="gitanoRevertBranch"
+alias gitanorevertbranch="gitanorevertbranch"
 #------------- Git-Clone -------
-function gitanoClone () {
+function gitanoclone () {
     echo " (*) Cloning project"
     echo " (*) Cloning project $1"
     echo " (*) Cloning project $1 in version $2"
 }
-alias gitanoClone="gitanoClone"
+alias gitanoclone="gitanoclone"
