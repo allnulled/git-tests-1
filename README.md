@@ -38,7 +38,9 @@ Or to commit your changes:
 
 Or to commit and push them:
 
-    ~$ gitanoPush
+    ~$ gitanopush
+
+And so on.
 
 All of these commands, that are only some examples, can be used without arguments, and the program will assist the user to achieve the demanded tasks.
 
