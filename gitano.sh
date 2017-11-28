@@ -180,7 +180,24 @@ function gitanoaddfiles () {
     done
 }
 alias gitanoaddfiles="gitanoaddfiles"
-
+alias gitanoaddfile="gitanoaddfiles"
+#------------- Git-Delete-Files -------
+function gitanodeletefiles () {
+    if [ $# -eq 0 ]
+	then
+		echo " (*) Listing differences: $@"
+		git diff
+	else 
+		echo " (*) Deleting files: $@"
+	fi
+    for file in "$@"
+    do
+	echo " (*) Deleting file: $file [git rm $file]"
+	git rm -f $file
+    done
+}
+alias gitanodeletefiles="gitanodeletefiles"
+alias gitanodeletefile="gitanodeletefiles"
 #------------- Git-Delete-Branch --------
 function gitanodeletebranch () {
 	echo " (*) Delete branch"
@@ -315,13 +332,6 @@ function gitanobranches () {
 		echo
 	fi
 }
-#------------- Git-Delete-Branch -------
-function gitanodeletebranch () {
-    echo " (*) Deleting branch"
-    echo " (*) Deleting branch $1"
-    echo " (*) Deleting branch $1 in its version $2"
-}
-alias gitanodeletebranch="gitanodeletebranch"
 #------------- Git-History-Branch -------
 function gitanohistory () {
 	if [ -z "$1" ]
