@@ -215,6 +215,12 @@ function gitanodeletebranch () {
 }
 alias gitanodeletebranch="gitanodeletebranch";
 
+#------------- Git-Clean -------
+function gitanoclean () {
+	echo " (*) Cleaning untracked files and directories [git clean]"
+
+}
+
 #------------- Git-Current-Branch -------
 function gitanobranch () {
 	git symbolic-ref --short HEAD
