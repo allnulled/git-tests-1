@@ -71,21 +71,6 @@ function gitanosetrepositoryurl () {
 }
 alias gitanosetrepositoryurl="gitanosetrepositoryurl"
 
-#------------- Git-Create-Branch -------
-function gitanocreatebranch () {
-    local BRANCH BRANCH_ORIGIN
-    echo " (*) Asking for branch-creation details"
-    read -p " - Type the name of the new branch you want to create: " BRANCH
-    read -p " - Type the name of the brand you want to extend: " BRANCH_ORIGIN
-    echo " (*) Creating branch [git checkout -b $BRANCH $BRANCH_ORIGIN]"
-    git checkout -b $BRANCH $BRANCH_ORIGIN
-}
-alias gitanocreatebranch="gitanocreatebranch"
-
-
-
-# NOT WORKING YET...
-
 #------------- Git-Initialize ----------
 function gitanoinitialize () {
     echo " (*) This process will go by:"
@@ -98,6 +83,166 @@ function gitanoinitialize () {
 }
 alias gitanoinitialize="gitanoinitialize"
 
+#------------- Git-Update-Branches -------
+function gitanoupdatebranches () {
+	echo " (*) Updating branches from remote repository [git fetch --all]"
+	git fetch --all
+}
+alias gitanoupdatebranches="gitanoupdatebranches"
+
+#------------ Git-Update-Branch --------
+function gitanoupdatebranch () {
+	echo " (*) Updating branch from remote repository [git pull origin]"
+}
+alias gitanoupdatebranch="gitanoupdatebranch"
+
+alias gitanodifferences="gitanodifferences"
+
+#------------- Git-Commit -------
+function gitanocommit () {
+    echo " (*) Commiting"
+    echo " (*) Commiting with message $1"
+    echo " (*) Commiting branch: x"
+    echo " (*) Commiting message: x"
+    echo " (*) Commiting files: x"
+    read -p "Is it okay? (y/N)" -n 1 -r
+	echo  
+	if [[ ! $REPLY =~ ^[YyEeSs]?$ ]]; then 
+		echo " (*) Abort commit."
+	fi
+    echo " (*) Commiting changes to local"
+    git commit
+}
+alias gitanocommit="gitanocommit"
+
+#------------- Git-Push -------
+function gitanopush () {
+    echo " (*) Pushing"
+    echo
+    echo " (*) Push Info -----------------------------"
+    echo " (*) Current branch: $(gitanobranch)"
+    echo " (*) Current user: $(gitanouser)"
+    echo " (*) Current email: $(gitanoemail)"
+    echo " (*) Current repository: $(gitanorepository)"
+    echo " (*) Current commit message: $(gitanocommitmessage)"
+    echo " (*) Current commit differences:"
+    gitanodifferences
+    echo
+    read -p " - ¿Commit changes to local branch now ($(gitanobranch))? (y/N)" -n 1 -r
+	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]
+	then
+		echo 
+		echo " (*) Abort commit."
+		return 0
+	fi
+	echo 
+    echo " (*) Commiting changes to local [git commit]"
+    git commit 
+	echo
+	echo " (*) Last commit message: $(gitanocommitmessage)"
+	echo " (*) Current repository:   $(gitanorepository)"
+	echo " (*) Current branch:       $(gitanobranch)"
+	echo
+	read -p " - ¿Push changes to remote branch now ($(gitanobranch))? (y/N)" -n 1 -r 
+	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]
+	then 
+		echo 
+		echo " (*) Abort push."
+		return 0
+	fi
+	echo
+	read -p " - ¿Are you sure? (y/N)" -n 1 -r 
+	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]
+	then
+		echo " (*) Abort push."
+		return 0
+	fi
+	echo 
+    echo " (*) Pushing changes to remote /origin/$(gitanobranch) [git push origin $(gitanobranch)]"
+    git push -u origin "$(gitanobranch)"
+    echo
+}
+alias gitanopush="gitanopush"
+
+#------------- Git-Add-File -------
+function gitanoaddfiles () {
+    if [ $# -eq 0 ]
+	then
+		echo " (*) Listing differences: $@"
+		git diff
+	else 
+		echo " (*) Adding files: $@"
+	fi
+    for file in "$@"
+    do
+	echo " (*) Adding file: $file [git add $file]"
+	git add $file
+    done
+}
+alias gitanoaddfiles="gitanoaddfiles"
+
+#------------- Git-Delete-Branch --------
+function gitanodeletebranch () {
+	echo " (*) Delete branch"
+	git branch
+	local BRANCH_DELETABLE
+	read -p " - Type the branch you want to delete: " BRANCH_DELETABLE
+	echo " (*) Deleting branch $BRANCH_DELETABLE"
+	read -p " - ¿Are you sure? (y/N)" -n 1 -r 
+	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]; then
+		echo " (*) Abort deleting branch."
+		return 0
+	fi
+    echo " (*) Finally deleting branch $BRANCH_DELETABLE"
+    git branch -d $BRANCH_DELETABLE
+}
+alias gitanodeletebranch="gitanodeletebranch";
+
+#------------- Git-Current-Branch -------
+function gitanobranch () {
+	git symbolic-ref --short HEAD
+}
+alias gitanobranch="gitanobranch"
+
+#------------- Git-Current-User -------
+function gitanouser () {
+	git config user.name
+}
+alias gitanouser="gitanouser"
+
+#------------- Git-Current-Email -------
+function gitanoemail () {
+	git config user.email
+}
+alias gitanoemail="gitanoemail"
+
+#------------- Git-Current-Repository -------
+function gitanorepository () {
+	basename `git rev-parse --show-toplevel`
+}
+alias gitanorepository="gitanorepository"
+
+#------------- Git-Current-Commit-Message -------
+function gitanocommitmessage () {
+	git log -1
+}
+alias gitanocommitmessage="gitanocommitmessage"
+
+#------------- Git-Create-Local-Branch --------
+function gitanocreatelocalbranch () {
+	echo " (*) Listing current branches in remote:"
+    local BRANCH BRANCH_ORIGIN
+    echo " (*) Asking for branch-creation details"
+    read -p " - Type the name of the new branch you want to create: " BRANCH
+    read -p " - Type the name of the brand you want to extend: " BRANCH_ORIGIN
+    if [[ -z $BRANCH_ORIGIN ]]; then
+    	BRANCH_ORIGIN="$(gitanobranch)"
+    fi
+    echo " (*) Creating branch [git checkout -b $BRANCH $BRANCH_ORIGIN]"
+    git checkout -b "$BRANCH" "$BRANCH_ORIGIN"
+}
+alias gitanocreatebranch="gitanocreatebranch"
+
 #------------- Git-Change-Branch -------
 function gitanochangebranch () {
 	local BRANCH
@@ -106,21 +251,68 @@ function gitanochangebranch () {
     git branch
     read -p " - Type the branch's name to switch to: " BRANCH
     echo " (*) Switching current branch $(gitanobranch) to $BRANCH [git checkout $BRANCH]"
-    git checkout "$BRANCH_ORIGIN"
+    git checkout "$BRANCH"
+    echo " (*) Showing last commits in branch $BRANCH [git log --pretty=oneline --abbrev-commit]"
+    git log --pretty=oneline --abbrev-commit
 }
 alias gitanochangebranch="gitanochangebranch"
-#------------- Git-Exists-Branch -------
-function gitanoexistsbranch () {
-	local BRANCH BRANCH_ID
-	echo " (*) Available branches: [git branch]"
+
+#------------- Git-Create-Branch -------
+function gitanocreatebranch () {
+	echo " (*) Listing current branches in local [git branch]"
 	git branch
-	read -p " - Type the name of the branch you want to know if exists: " BRANCH
+	echo " (*) Listing current branches in remote [git ls-remote --heads origin]"
+	git ls-remote --heads origin
+    local BRANCH BRANCH_ORIGIN
+    echo " (*) Asking for new branch details"
+    read -p " - Type the name of the new branch you want to create: " BRANCH
+    read -p " - Type the name of the brand you want to extend (empty for default): " BRANCH_ORIGIN
+    if [[ -z $BRANCH_ORIGIN ]]; then
+    	BRANCH_ORIGIN="$(gitanobranch)"
+    fi
+    echo " (*) Creating:"
+    echo " (*) In repository:           $(gitanorepository)"
+    echo " (*) From local branch:       $BRANCH_ORIGIN"
+    echo " (*) Creating remote branch:  $BRANCH"
+    echo " (*) Creating local branch $BRANCH from original branch $BRANCH_ORIGIN [git checkout -b $BRANCH $BRANCH_ORIGIN]"
+    read -p "Is it okay? (y/N)" -n 1 -r
+	echo  
+	if [[ ! $REPLY =~ ^[YyEeSs]?$ ]]; then 
+		echo " (*) Abort commit."
+		return 0
+	fi
+	echo " (*) Creating branch $BRANCH locally [git checkout -b $BRANCH]"
+	git checkout -b "$BRANCH"
+    echo " (*) Commiting branch creation [git commit -m @autogeneratedmessage]"
+	git commit -m "Creating branch $BRANCH"
+	echo " (*) Pushing branch creation [git -u push origin $BRANCH]"
+	git push -u origin "$BRANCH"
+}
+alias gitanocreatebranch="gitanocreatebranch"
+
+# NOT WORKING YET...
+
+
+
+#------------- Git-Exists-Branch -------
+function gitanobranches () {
+	local BRANCH BRANCH_ID
+	echo " (*) Available branches with last commits: [git branch -vv]"
+	git branch -vv
+	read -p " - Type the branch you want to pick the UUID: " BRANCH
 	echo " (*) Checking the branch UUID [git rev-parse --verify $BRANCH]"
 	BRANCH_ID=$(git rev-parse --verify "$BRANCH")
 	if [[ "$BRANCH_ID" == "" ]]; then
 		echo "No, the branch $BRANCH does not exists."
 	else
-		echo "The branch is: $BRANCH_ID"
+		echo "The UUID of the branch is:"
+		echo
+		echo 
+		echo
+		echo "        $BRANCH_ID       "
+		echo 
+		echo
+		echo
 	fi
 }
 #------------- Git-Delete-Branch -------
@@ -136,10 +328,9 @@ function gitanohistory () {
 	then
 		echo " (*) Checking history of current branch [git log]"
 		git log
-	else
-		echo " (*) Checking history of file [git log $1]"
-		git log "$1"
 	fi
+	echo " (*) Checking history of file [git log $1]"
+	git log "$1"
 }
 alias gitanohistory="gitanohistory"
 #------------- Git-Differences -------
@@ -153,121 +344,6 @@ function gitanosolvedifferences () {
     echo " (*) Solving differences"
     git difftool --prompt
 }
-alias gitanodifferences="gitanodifferences"
-#------------- Git-Commit -------
-function gitanocommit () {
-    echo " (*) Commiting"
-    echo " (*) Commiting with message $1"
-    echo " (*) Commiting branch: x"
-    echo " (*) Commiting message: x"
-    echo " (*) Commiting files: x"
-    read -p "Is it okay? (y/N)" -n 1 -r
-	echo  
-	if [[ ! $REPLY =~ ^[YyEeSs]?$ ]]
-	then 
-		echo " (*) Abort commit."
-	else 
-	    echo " (*) Commiting changes to local"
-	    git commit
-	fi
-}
-alias gitanocommit="gitanocommit"
-#------------- Git-Push -------
-function gitanopush () {
-    echo " (*) Pushing"
-    echo
-    echo " (*) Push Info:"
-    echo " (*) Current branch: $(gitanobranch)"
-    echo " (*) Current user: $(gitanouser)"
-    echo " (*) Current email: $(gitanoemail)"
-    echo " (*) Current repository: $(gitanorepository)"
-    echo " (*) Current commit message:"
-    echo 
-    echo " ---------------------------"
-    gitanocommitmessage
-    echo " ---------------------------"
-    echo 
-    echo " (*) Current commit differences:"
-    echo
-    gitanodifferences
-    echo
-	echo
-	echo
-    read -p " - ¿COMMIT BRANCH $(gitanobranch) NOW? (y/N)" -n 1 -r
-	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]
-	then
-		echo 
-		echo 
-		echo " (*) Abort commit."
-		return 0
-	else 
-		echo 
-		echo 
-	    echo " (*) Commiting changes to local [git commit]"
-	    git commit 
-	fi
-	echo
-	echo
-	echo
-	echo " (*) Final commit message: "
-	echo "$(gitanocommitmessage)"
-	echo " (*) Current repository: $(gitanorepository)"
-	echo " (*) Current branch: $(gitanobranch)"
-	echo
-	echo
-	echo
-	read -p " - ¿PUSH CHANGES OF BRANCH '$(gitanobranch)'? (y/N)" -n 1 -r 
-	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]
-	then 
-		echo 
-		echo 
-		echo " (*) Abort push."
-		return 0
-	else
-		echo
-		echo
-	    echo "Okay, 'yes' but..."
-	fi
-	echo
-	echo
-	echo
-	read -p " - ¿Are you sure? (y/N)" -n 1 -r 
-	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]
-	then
-		echo " (*) Abort push."
-		return 0
-	else 
-	    echo " (*) Pushing changes to remote /origin/$(gitanobranch) [git push origin $(gitanobranch)]"
-	    git push -u origin "$(gitanobranch)"
-	fi
-    echo
-}
-alias gitanopush="gitanopush"
-#------------- Git-Current-Branch -------
-function gitanobranch () {
-	git symbolic-ref --short HEAD
-}
-alias gitanobranch="gitanobranch"
-#------------- Git-Current-User -------
-function gitanouser () {
-	git config user.name
-}
-alias gitanouser="gitanouser"
-#------------- Git-Current-Email -------
-function gitanoemail () {
-	git config user.email
-}
-alias gitanoemail="gitanoemail"
-#------------- Git-Current-Repository -------
-function gitanorepository () {
-	basename `git rev-parse --show-toplevel`
-}
-alias gitanorepository="gitanorepository"
-#------------- Git-Current-Commit-Message -------
-function gitanocommitmessage () {
-	git log -1
-}
-alias gitanocommitmessage="gitanocommitmessage"
 #------------- Git-Current-Differences -------
 function gitanodifferences () {
 	git diff --name-only --diff-filter=U
@@ -300,27 +376,19 @@ function gitanomixbranch () {
 }
 alias gitanomixbranch="gitanomixbranch"
 #------------- Git-Status -------
-function gitanostatus () {
-    echo " (*) Showing commit status"
-    echo " (*) Showing commit status of file $1"
+function gitano () {
+    if [[ -z "$1" ]]; then
+    	echo " (*) Current commit status"
+    	git status
+    	return 0
+    fi
+	echo " (*) Showing status of file $1 [git status $1]"
+	git status "$1"
+	echo " (*) Showing branches sorted by last commit [git for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate:short) %(refname:short)']"
+	git for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate:short) %(refname:short)'
 }
-alias gitanostatus="gitanostatus"
-#------------- Git-Add-File -------
-function gitanoaddfiles () {
-    if [ $# -eq 0 ]
-	then
-		echo " (*) Listing differences: $@"
-		git diff
-	else 
-		echo " (*) Adding files: $@"
-	fi
-    for file in "$@"
-    do
-	echo " (*) Adding file: $file"
-	git add $file
-    done
-}
-alias gitanoaddfiles="gitanoaddfiles"
+alias gitano="gitano"
+
 #------------- Git-Remove-File -------
 function gitanoremovefile () {
     echo " (*) Removing file"
@@ -350,3 +418,9 @@ function gitanoclone () {
     echo " (*) Cloning project $1 in version $2"
 }
 alias gitanoclone="gitanoclone"
+#------------- Git-Move-File --------
+function gitanomovefile () {
+	echo " (*) Moving a file"
+	git mv 
+}
+alias gitanomovefile="gitanomovefile"
