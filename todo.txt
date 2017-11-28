@@ -1,0 +1,5 @@
+feature/0001: Remove repeated methods
+feature/0002: Make "gitanomixbranch" work
+feature/0003: Make "gitanoremovefile" work
+feature/0004: List all the methods that can work with 1, 2 or multiple parameters
+feature/0005: Implement with-parameters alternative
