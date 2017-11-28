@@ -180,7 +180,24 @@ function gitanoaddfiles () {
     done
 }
 alias gitanoaddfiles="gitanoaddfiles"
-
+alias gitanoaddfile="gitanoaddfiles"
+#------------- Git-Delete-Files -------
+function gitanodeletefiles () {
+    if [ $# -eq 0 ]
+	then
+		echo " (*) Listing differences: $@"
+		git diff
+	else 
+		echo " (*) Deleting files: $@"
+	fi
+    for file in "$@"
+    do
+	echo " (*) Deleting file: $file [git rm $file]"
+	git rm -f $file
+    done
+}
+alias gitanodeletefiles="gitanodeletefiles"
+alias gitanodeletefile="gitanodeletefiles"
 #------------- Git-Delete-Branch --------
 function gitanodeletebranch () {
 	echo " (*) Delete branch"
@@ -315,13 +332,6 @@ function gitanobranches () {
 		echo
 	fi
 }
-#------------- Git-Delete-Branch -------
-function gitanodeletebranch () {
-    echo " (*) Deleting branch"
-    echo " (*) Deleting branch $1"
-    echo " (*) Deleting branch $1 in its version $2"
-}
-alias gitanodeletebranch="gitanodeletebranch"
 #------------- Git-History-Branch -------
 function gitanohistory () {
 	if [ -z "$1" ]
@@ -361,7 +371,7 @@ function gitanocommitinformation () {
 	gitanouser
 	gitanoemail
 	gitanorepository
-	gitanocommitMessage
+	gitanocommitmessage
 	gitanodifferences
 }
 alias gitanocommitinformation="gitanocommitinformation"
@@ -380,12 +390,15 @@ function gitano () {
     if [[ -z "$1" ]]; then
     	echo " (*) Current commit status"
     	git status
+    	echo " (*) Showing branches sorted by last commit [...]"
+		# git for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate) %(refname)'
+		for branch in `git branch | sed s/^..//`; do
+		    echo -e `git log -1 --pretty=format:"%Cgreen%ci %Cblue%cr%Creset" "$branch"`\\t"$branch";
+		done | sort -r
     	return 0
     fi
 	echo " (*) Showing status of file $1 [git status $1]"
 	git status "$1"
-	echo " (*) Showing branches sorted by last commit [git for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate:short) %(refname:short)']"
-	git for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate:short) %(refname:short)'
 }
 alias gitano="gitano"
 
