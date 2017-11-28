@@ -106,6 +106,7 @@ function gitanocommit () {
     echo " (*) Commiting message: x"
     echo " (*) Commiting files: x"
     read -p "Is it okay? (y/N)" -n 1 -r
+    echo
 	echo  
 	if [[ ! $REPLY =~ ^[YyEeSs]?$ ]]; then 
 		echo " (*) Abort commit."
@@ -129,6 +130,7 @@ function gitanopush () {
     gitanodifferences
     echo
     read -p " - ¿Commit changes to local branch now ($(gitanobranch))? (y/N)" -n 1 -r
+    echo
 	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]
 	then
 		echo 
@@ -144,6 +146,7 @@ function gitanopush () {
 	echo " (*) Current branch:       $(gitanobranch)"
 	echo
 	read -p " - ¿Push changes to remote branch now ($(gitanobranch))? (y/N)" -n 1 -r 
+	echo
 	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]
 	then 
 		echo 
@@ -152,6 +155,7 @@ function gitanopush () {
 	fi
 	echo
 	read -p " - ¿Are you sure? (y/N)" -n 1 -r 
+	echo
 	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]
 	then
 		echo " (*) Abort push."
@@ -206,6 +210,7 @@ function gitanodeletebranch () {
 	read -p " - Type the branch you want to delete: " BRANCH_DELETABLE
 	echo " (*) Deleting branch $BRANCH_DELETABLE"
 	read -p " - ¿Are you sure? (y/N)" -n 1 -r 
+	echo
 	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]; then
 		echo " (*) Abort deleting branch."
 		return 0
@@ -215,12 +220,35 @@ function gitanodeletebranch () {
 }
 alias gitanodeletebranch="gitanodeletebranch";
 
+#------------- Git-Delete-Branch --------
+function gitanodeletebranches () {
+	echo " (*) Delete branches $@"
+	echo " (*) Current branches [git branch]"
+	git branch
+	local BRANCH_DELETABLE
+	for branch in "$@"
+    do
+	echo " (*) Deleting branch: $branch [git branch -d $branch]"
+	git branch -d $branch
+    done
+}
+alias gitanodeletebranches="gitanodeletebranches"
+
 #------------- Git-Clean -------
 function gitanoclean () {
-	echo " (*) Cleaning untracked files and directories [git clean]"
-
+	echo " (*) Cleaning untracked files and directories"
+	echo " (*) Showing what would be cleaned: [git clean -n]"
+	git clean -n
+	read -p " - ¿Are you sure? (y/N)" -n 1 -r 
+	echo
+	if [[ ! $REPLY =~ ^[YyEeSs]$ ]]; then
+		echo "*) Abort cleaning files and directories."
+		return 0
+	fi
+	echo " (*) Cleaning files and directories [git clean -f]"
+	git clean -f
 }
-
+alias gitanoclean="gitanoclean"
 #------------- Git-Current-Branch -------
 function gitanobranch () {
 	git symbolic-ref --short HEAD
@@ -299,6 +327,7 @@ function gitanocreatebranch () {
     echo " (*) Creating remote branch:  $BRANCH"
     echo " (*) Creating local branch $BRANCH from original branch $BRANCH_ORIGIN [git checkout -b $BRANCH $BRANCH_ORIGIN]"
     read -p "Is it okay? (y/N)" -n 1 -r
+    echo
 	echo  
 	if [[ ! $REPLY =~ ^[YyEeSs]?$ ]]; then 
 		echo " (*) Abort commit."
