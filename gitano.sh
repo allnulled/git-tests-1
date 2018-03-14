@@ -436,39 +436,94 @@ function gitano () {
 	git status "$1"
 }
 alias gitano="gitano"
-
-#------------- Git-Remove-File -------
-function gitanoremovefile () {
-    echo " (*) Removing file"
+#------------- Git-Remove-Files -------
+function gitanoremovefiles () {
+    echo " (*) Removing files"
     echo " (*) Removing file $1"
+    if [ $# -eq 0 ]
+	then
+		echo " (*) Listing differences: $@"
+		git diff
+	else 
+		echo " (*) Removing files: $@"
+	fi
+    for file in "$@"
+    do
+		echo " (*) Removing file: $file [git rm -f $file]"
+		git rm -f $file
+    done
 }
-alias gitanoremovefile="gitanoremovefile"
+alias gitanoremovefiles="gitanoremovefiles"
+alias gitanoremovefile="gitanoremovefiles"
+#------------- Git-Remove-Remote-File -------
+function gitanoremoveremotefiles () {
+    echo " (*) Removing remote files"
+    echo " (*) Removing remote file $1"
+    if [ $# -eq 0 ]
+	then
+		echo " (*) Listing differences: $@"
+		git diff
+	else 
+		echo " (*) Removing remote files: $@"
+	fi
+    for file in "$@"
+    do
+		echo " (*) Removing remote file: $file [git rm --cached $file]"
+		git rm --cached $file
+    done
+}
+alias gitanoremoveremotefiles="gitanoremoveremotefiles"
+alias gitanoremoveremotefile="gitanoremoveremotefiles"
 #------------- Git-Revert-File -------
-function gitanorevertfile () {
-    echo " (*) Reverting file $1 to version $2"
+function gitanorevertfiles () {
+    echo " (*) Reverting files"
+    if [ $# -eq 0 ]
+	then
+		echo " (*) Listing differences: $@"
+		git diff
+	else 
+		echo " (*) Reverting files: $@"
+	fi
+    for file in "$@"
+    do
+		echo " (*) Reverting file: $file [git checkout -- $file]"
+		git checkout -- $file
+    done
 }
-alias gitanorevertfile="gitanorevertfile"
+alias gitanorevertfiles="gitanorevertfiles"
+alias gitanorevertfile="gitanorevertfiles"
 #------------- Git-Revert-Commit -------
 function gitanorevertcommit () {
-    echo " (*) Reverting commit $1 "
+    echo " (*) Reverting commit"
+    echo " (*) Reverting current commit to last commit [git reset --hard]"
+    git reset --hard
 }
 alias gitanorevertcommit="gitanorevertcommit"
-#------------- Git-Revert-Branch -------
-function gitanorevertbranch () {
-    echo " (*) Reverting branch"
-    read -p " - Current branch"
-}
-alias gitanorevertbranch="gitanorevertbranch"
 #------------- Git-Clone -------
 function gitanoclone () {
     echo " (*) Cloning project"
-    echo " (*) Cloning project $1"
-    echo " (*) Cloning project $1 in version $2"
+	if [ $# -eq 0 ]
+	then
+		echo " (*) Listing differences: $@"
+		git diff
+	fi
+	if [ $# -eq 1 ]
+	then
+		echo " (*) Cloning project $1 [git clone $1]"
+		git clone $1
+	fi
+	if [ $# -eq 2 ]
+	then
+	    echo " (*) Cloning branch $2 of project $1 [git clone -b $2 $1]"
+		git clone -b $2 $1
+	fi
 }
 alias gitanoclone="gitanoclone"
 #------------- Git-Move-File --------
 function gitanomovefile () {
 	echo " (*) Moving a file"
-	git mv 
+	echo " (*) Moving a file from $1 to $2 [git mv $1 $2]"
+	git mv $1 $2
 }
 alias gitanomovefile="gitanomovefile"
+alias gitanorenamefile="gitanomovefile"
