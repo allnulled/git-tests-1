@@ -44,7 +44,119 @@ And so on.
 
 All of these commands, that are only some examples, can be used without arguments, and the program will assist the user to achieve the demanded tasks.
 
-## 6. Why?
-Because it's easier this way.
+But in case that you were thinking: `why do not you put a list of them?`, here it is:
 
-# Read this file
+*`gitanosettingsinfo`*: executes a `git config --list`
+
+*`gitanolistrepositories`*: executes a `git remote -v`
+
+*`gitanologin`*: executes, one after the other, and asking for the user's input:
+
+	git config user.name "$USERNAME"
+
+	git config user.email "$EMAIL"
+	
+	git config user.password "$PASSWORD"
+	
+	git config credential.helper store
+	
+	git config --list
+
+*`gitanocreaterepository`*: executes, one after the other, and asking for the user's input:
+
+	git add README.md
+
+	git commit -m "First commit"
+
+	git remote add origin $REPOSITORY_URL
+
+	git push -u origin master
+
+*`gitanosetrepositoryurl`*: executes, one after the other, and asking for the user's input:
+
+	git remote -v
+
+	git remote set-url $REPOSITORY_NAME $REPOSITORY_URL
+
+*`gitanoinitialize`*: executes one after the other:
+	
+	git init
+    
+	gitanologin
+    
+	gitanocreaterepository
+
+*`gitanoupdatebranches`*: executes `git fetch --all`.
+
+*`gitanoupdatebranch`*: executes `git pull`.
+
+*`gitanocommit`*: executes `git commit`.
+
+*`gitanopush`*: executes, asking for the user's input:
+
+	gitanodifferences
+	
+	git commit 
+	
+	git push -u origin "$(gitanobranch)".
+
+*`gitanoaddfiles`*: executes `git add $file`. 
+
+*`gitanodeletefiles`*: executes ``. 
+
+*`gitanodeletebranch`*: executes ``. 
+
+*`gitanodeletebranches`*: executes ``. 
+
+*`gitanoclean`*: executes ``. 
+
+*`gitanobranch`*: executes ``. 
+
+*`gitanouser`*: executes ``. 
+
+*`gitanoemail`*: executes ``. 
+
+*`gitanorepository`*: executes ``. 
+
+*`gitanocommitmessage`*: executes ``. 
+
+*`gitanocreatelocalbranch`*: executes ``. 
+
+*`gitanochangebranch`*: executes ``. 
+
+*`gitanocreatebranch`*: executes ``. 
+
+*`gitanobranches`*: executes ``. 
+
+*`gitanohistory`*: executes ``. 
+
+*`gitanodifferences`*: executes ``. 
+
+*`gitanosolvedifferences`*: executes ``. 
+
+*`gitanodifferences`*: executes ``. 
+
+*`gitanosolvedifferences`*: executes ``. 
+
+*`gitanocommitinformation`*: executes ``. 
+
+*`gitanomixbranch`*: executes ``. 
+
+*`gitano`*: executes ``. 
+
+*`gitanoremovefiles`*: executes ``. 
+
+*`gitanoremoveremotefiles`*: executes ``. 
+
+*`gitanorevertfiles`*: executes ``. 
+
+*`gitanorevertcommit`*: executes ``. 
+
+*`gitanoclone`*: executes ``. 
+
+*`gitanomovefile`*: executes ``. 
+
+
+## 6. Why?
+
+Because it's easier this way. I do not need to remember all the commands and their options, and also I can create combos of commands, and reduce the amount of options that git gives, while I can still use the normal git command. It's wonderful for me.
