@@ -102,59 +102,61 @@ But in case that you were thinking: `why do not you put a list of them?`, here i
 
 *`gitanoaddfiles`*: executes `git add $file`. 
 
-*`gitanodeletefiles`*: executes ``. 
+*To be continued...*
 
-*`gitanodeletebranch`*: executes ``. 
+*`gitanodeletefiles`*: executes `...`. 
 
-*`gitanodeletebranches`*: executes ``. 
+*`gitanodeletebranch`*: executes `...`. 
 
-*`gitanoclean`*: executes ``. 
+*`gitanodeletebranches`*: executes `...`. 
 
-*`gitanobranch`*: executes ``. 
+*`gitanoclean`*: executes `...`. 
 
-*`gitanouser`*: executes ``. 
+*`gitanobranch`*: executes `...`. 
 
-*`gitanoemail`*: executes ``. 
+*`gitanouser`*: executes `...`. 
 
-*`gitanorepository`*: executes ``. 
+*`gitanoemail`*: executes `...`. 
 
-*`gitanocommitmessage`*: executes ``. 
+*`gitanorepository`*: executes `...`. 
 
-*`gitanocreatelocalbranch`*: executes ``. 
+*`gitanocommitmessage`*: executes `...`. 
 
-*`gitanochangebranch`*: executes ``. 
+*`gitanocreatelocalbranch`*: executes `...`. 
 
-*`gitanocreatebranch`*: executes ``. 
+*`gitanochangebranch`*: executes `...`. 
 
-*`gitanobranches`*: executes ``. 
+*`gitanocreatebranch`*: executes `...`. 
 
-*`gitanohistory`*: executes ``. 
+*`gitanobranches`*: executes `...`. 
 
-*`gitanodifferences`*: executes ``. 
+*`gitanohistory`*: executes `...`. 
 
-*`gitanosolvedifferences`*: executes ``. 
+*`gitanodifferences`*: executes `...`. 
 
-*`gitanodifferences`*: executes ``. 
+*`gitanosolvedifferences`*: executes `...`. 
 
-*`gitanosolvedifferences`*: executes ``. 
+*`gitanodifferences`*: executes `...`. 
 
-*`gitanocommitinformation`*: executes ``. 
+*`gitanosolvedifferences`*: executes `...`. 
 
-*`gitanomixbranch`*: executes ``. 
+*`gitanocommitinformation`*: executes `...`. 
 
-*`gitano`*: executes ``. 
+*`gitanomixbranch`*: executes `...`. 
 
-*`gitanoremovefiles`*: executes ``. 
+*`gitano`*: executes `...`. 
 
-*`gitanoremoveremotefiles`*: executes ``. 
+*`gitanoremovefiles`*: executes `...`. 
 
-*`gitanorevertfiles`*: executes ``. 
+*`gitanoremoveremotefiles`*: executes `...`. 
 
-*`gitanorevertcommit`*: executes ``. 
+*`gitanorevertfiles`*: executes `...`. 
 
-*`gitanoclone`*: executes ``. 
+*`gitanorevertcommit`*: executes `...`. 
 
-*`gitanomovefile`*: executes ``. 
+*`gitanoclone`*: executes `...`. 
+
+*`gitanomovefile`*: executes `...`. 
 
 
 ## 6. Why?
